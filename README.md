@@ -93,4 +93,4 @@ Like in those examples, you can run any borg command individually for boot repo,
     borg-migrate target list --glob 'mynotebook*'
     ```
 
-Note that everything after the command borg-migrate are the your known borg elements found with "borg --help".
+Note that everything after the commands "borg-migrate source" and "borg-migrate target" are the your well-known borg elements found with "borg --help".
