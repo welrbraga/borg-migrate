@@ -30,6 +30,7 @@ Talking about env we have these others requirements:
 
 * Linux box - Sorry guy I have not tested on Mac OS, BSD etc, so I can't give you guaranty that it will work, but if you try, let me know if it works.
 * Two accessible borg repositories - It's expected that both repositories exists and you can access them from the machine where borg-migrate will run.
+* BORG_PASSCOMMAND - It's is safier than type it everytime, or use another method - read bellow
 * Portuguese - Is in everywhere. Another sorry (maybe temporary, I expect). I have lots of scripts for my exclusive use and I used to create them in portuguese Borg-migrate was not different but it has demand I or (maybe) we can translate it.
 
 ## Limitations
@@ -46,13 +47,50 @@ According to Borg 1.4.0 docs, these are the acutal limitations:
     import-tar reads POSIX.1-1988 (ustar), POSIX.1-2001 (pax), GNU tar, UNIX V7 tar
     and SunOS tar with extended attributes.
 
+## Borg password
+
+Save your repo password in a file is safer than others methods. Of course, if you this using the right tools.
+
+Bellow I suggest you three examples, where the firsts are less safe than the nexts.
+
+You can put your in a unencrypt file with 0600 permission read just for your own.
+
+    ```shell
+    BORG_PASSCOMMAND="cat file-with-your-pass"
+    ```
+
+A better and safier way, than that is you hash your password with base64 (for example) and this hash in a file that will be unhashed by the command your inform here. Remember that your password is not encrypted, but it is more secure than save in a plain file.
+
+    ```shell
+    BORG_PASSCOMMAND="base64 -d file-with-your-pass"
+    ```
+
+Personally I put all my secrets in a vault like Bitwarden and access them safely with one long and secure password and MFA, so I recommend you do the same. Of course there are any others alternatives you can use.
+
+    ```shell
+    BORG_PASSCOMMAND="bw get password 4df5d8d8-d8ce-44fe-a19a-af2401c5623f"
+    ```
+
 ## Installing
 
 To install just follow these steps:
 
 1. Get a version of the main script (borg-migrate.sh) and save it in some cool folder registered in your PATH, like /usr/local/bin, ~/.bin, ~/.local/bin and so on. (Tip: Normally, it's nice to remove the extension - borg-migrate, instead of borg-migrate.sh)
 2. Change your permission to allow your users to run it (chmod a+x ~/usr/local/bin/borg-migrate)
-3. Configure your repo informations in a file called ~/.borg-migrate.env
+3. That is it
+
+## Configure your repo info
+
+The repo access informations are configured in file called .borg-migrate.env that is expected to be in your $HOME or in the actual directory.
+
+You just need to inform two items for each repo:
+
+BORG_REPO - The path of the repo
+BORG_PASSCOMMAND - The command that return your repo password
+
+When you run the borg-migrate the first time it will create a file called borg-migrate.env.sample for you.
+
+Change your content as you need and rename it to .borg-migrate.env (a dot file, without .sample suffix).
 
 ## Checking
 
