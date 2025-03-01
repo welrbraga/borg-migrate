@@ -15,6 +15,24 @@ BORG_PASSCOMMAND_DESTINO="command-that-return-your-repo-password"
 EOF
 }
 
+show_help() {
+  echo "Borg Migrate - Move backups do Borg de um repositório para outro"
+  echo ""
+  echo "Uso: $0 [ source | target ] <borg-command>"
+  echo "     $0 <nome-do-backup>"
+  echo ""
+  echo "Opções:"
+  echo "  source   - Executa o comando Borg no repositório de origem."
+  echo "  target   - Executa o comando Borg no repositório de destino."
+  echo "  <borg-command> - Comando Borg a ser executado."
+  echo "  <nome-do-backup> - Nome do backup a ser transferido."
+  echo ""
+  echo "Exemplos:"
+  echo "  $0 source list"
+  echo "  $0 target list"
+  echo "  $0 backup-20250228"
+}
+
 # Verifica se o arquivo env está disponível
 if [ -f "$HOME/.borg-migrate.env" ]; then
   # shellcheck disable=SC1091
@@ -33,7 +51,7 @@ else
 fi
 
 if [ -z "$1" ]; then
-  echo "Uso: $0 source | target | <nome-do-backup>"
+  show_help
   exit 1
 fi
 
